@@ -1,0 +1,86 @@
+#######################################################################
+# Build Rule for Generating Thesis of Creative Informatics
+# Author: Yuki Furuta <furushchev@jsk.imi.i.u-tokyo.ac.jp>
+# Date: 2015/11/12
+#######################################################################
+
+# programs
+OS=$(shell uname -s)
+LATEX=platex
+LATEXFLAGS=-interaction=nonstopmode -kanji=utf8
+TETEX2_ENABLED=false
+MAKEINDEX=makeindex
+BIBTEXFLAGS=-kanji=utf8
+BIBTEX=pbibtex $(BIBTEXFLAGS)
+DVIPDFM=dvipdfmx
+DVIPDFMFLAGS=-p a4
+BBFLAGS=-m
+XBBFLAGS=-x
+EXTRACTBB=extractbb
+GLOB_OPTIONS=i
+
+# files
+TARGET=main
+BASEDIR=.
+FIGDIR=$(BASEDIR)/figs
+
+# dependencies
+TEX_FILES=$(glob $(BASEDIR)/*.tex $(BASEDIR)/src/*.tex)
+TEX_BAK_FILES=$(addsuffix .orig, $(TEX_FILES))
+BIB_FILES=$(glob $(BASEDIR)/*.bib)
+RAWIMG_FILES=$(glob $(FIGDIR)/*.jpg $(FIGDIR)/*.png $(FIGDIR)/*.pdf)
+IMG_FILES=$(glob $(FIGDIR)/*.eps) $(RAWIMG_FILES)
+BB_FILES=$(addsuffix .bb, $(removesuffix $(RAWIMG_FILES)))
+XBB_FILES=$(addsuffix .xbb, $(removesuffix $(RAWIMG_FILES)))
+
+
+.SUBDIRS: $(FIGDIR)
+	%.bb: %.png
+		$(EXTRACTBB) $(BBFLAGS) $<
+	%.bb: %.jpg
+		$(EXTRACTBB) $(BBFLAGS) $<
+	%.bb: %.pdf
+		$(EXTRACTBB) $(BBFLAGS) $<
+	%.xbb: %.png
+		$(EXTRACTBB) $(XBBFLAGS) $<
+	%.xbb: %.jpg
+		$(EXTRACTBB) $(XBBFLAGS) $<
+	%.xbb: %.pdf
+		$(EXTRACTBB) $(XBBFLAGS) $<
+
+.PHONY: clean preview publish all
+
+TEXDEPS[]=$(TEX_FILES) $(BIB_FILES) $(IMG_FILES) $(XBB_FILES) $(BB_FILES)
+LaTeXDocument($(TARGET), $(TARGET))
+.DEFAULT: all
+all: $(TARGET).pdf $(TARGET).dvi
+
+openpdf(f)=
+	if $(equal $(OS), Linux)
+		evince $(f)
+	elseif $(equal $(OS), Darwin)
+		bash -c "open -a \"Preview.app\" $(f)"
+
+preview: $(TARGET).pdf
+	openpdf($(TARGET).pdf)
+clean:
+	-rm -f $(glob *.toc *.log *.pdf *.dvi *.fls *.aux *.maf *.mtc *.bbl *.blg) $(XBB_FILES) $(BB_FILES)
+
+%.tex.orig: %.tex
+	sed -i.orig -e's/、/，/g' -e's/。/．/g' $<
+publish: $(TEX_BAK_FILES) $(TARGET).pdf
+
+# notify after build
+notify(msg)=
+	try
+		if $(equal $(OS), Linux)
+			notify-send -i gnome-about-logo -t 3000 '<big>Thesis Generator</big>' $(msg)
+		elseif $(equal $(OS), Darwin)
+			osascript -e 'display notification "'$(msg)'" with title "Thesis Generator"'
+	default
+		echo "Failed to notify"
+
+.BUILD_SUCCESS:
+	notify("Compiling LaTeX successfly finished.")
+.BUILD_FAILURE:
+	notify("Compile Error Occured!")
