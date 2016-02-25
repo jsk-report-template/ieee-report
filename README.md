@@ -1,4 +1,4 @@
-# jrsj-report
+# ieee-report-template
 
 Latex template for IEEE Conference (Paper Plaza)
 
@@ -31,6 +31,21 @@ $ make
   travis enable
   travis setup releases --force
 ```
+
+- After `travis` command, configuration like below will be appended to `.travis.yml`.
+
+  ```yaml
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: main.pdf
+  skip_cleanup: true
+  on:
+    tags: true
+```
+
+**NOTE** Please make sure you have `skip_cleanup` and `on: tags` is `true`
+
 
 - Push your tag by `git push --tags`. Then you can watch pdf in github releases.
 
