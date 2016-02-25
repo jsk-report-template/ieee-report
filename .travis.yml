@@ -4,23 +4,26 @@ compiler:
 - gcc
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: required
-    - os: osx
+  - os: linux
+    dist: trusty
+    sudo: required
+  - os: osx
   allow_failures:
-    - os: osx
+  - os: osx
   fast_finish: true
 before_script:
-- if [ $TRAVIS_OS_NAME == "osx" ]; then brew update -y; else sudo apt-get update -y -qq; fi
-- if [ $TRAVIS_OS_NAME != "osx" ]; then sudo apt-get install -y -qq build-essential; fi
+- if [ $TRAVIS_OS_NAME == "osx" ]; then brew update -y; else sudo apt-get update -y
+  -qq; fi
+- if [ $TRAVIS_OS_NAME != "osx" ]; then sudo apt-get install -y -qq build-essential;
+  fi
 script:
 - make pub VERBOSE=1
 deploy:
   provider: releases
   api_key:
-# replace with your github api key
-    secure: IZM72Tw/G4sXFDmBW/yhiY18+uma/I1AlBpl3L3M2ZpVrFRrlvvGrkJkhZC/NdfqfS12Os+lxYFW7lbY3AjFdJsAhUGT/Ve6VzWU0RmxwjQRxbXUKjE4zukfIxA1NI3COM449KV7zcFKdbkAeln0DeLJ6roBfHLuu9HT2DH97yYXzilkDN3cpPOgkPBcehcA0VNj1PhighdA1rs7apeMFR7IhlvswDOxSVBtnaJnNQxVnav1VlIIBQc63nHhtrQUxfYzYuL9Xg/cy6xi+8uok4smyc46/ZXvTj0zd4Si3mVj18mMb/xGVOLBIVut1JRfMqHozrHFhFC1RCylJeM4eEJXUkR2uvK/aUn2td/bmCG76BudTBeGCr+ne/pbYLGdVEASHRMgkNnrrwAljYl2NA7i5JtMVS439j9A5U1+pMyeuHqTNBqZGHKI7wejoYEK021rqs2zxKYeD8b1g+7ZitPjUGO8r/9tEm8f0GzTgCeqkZM8xqzqrmkZuDfx54qZXmfKChBAZAa6sNnhZCT5sqZ6sx0bY4JwDMPd2+5r4qVRueic8do6hm6xrPtPrX1XdaSQPJNlwN6znKfq1OYZ9GBaFEzYEz301z5WS3d6tuzWA8uyoLTW49Z40iIvtZocDT8ri9ZOhz1ZvDdgWc2L1fAW37AMAcppym5QLF9lcfQ=
+    secure: s4a+uW4LUoTJelG4VwVShzYtujd5qILsbHzHuLLbTcwd2i6TNfipoQzc+gnAwMV4H6THesmCXEwS7QBFRrRrEzV1LiFtWsb4ONQvOU67Ec+JrAcZj6ZjD+D/jlc6meW4W0ULa8bWI2a8AyzXGy8t116lb33yokE2GSHMFp3GcZZdUSzXyRi/BeNMtG/QZSRMUKGRDyzwoSkfawMLz6J5JY2oqyvSVJZAqNzbpfJGgvkZ1403020He+yL8Ip7UjrSbgL0WSCQD2m6H36kCykyCLYA3OTecdvJHKwV+7Ovhk6yyxz/kdzaTRC+o09OEK+xEDmVjrSHq0uRssZaNQGg/kPU3ilevC3Krg5HhnHhHww1k1/nlvm3zWZZ04hPkLeT16v7j7CNvuJzgN1scNVn9i66kHGxq1V10JQfSV+xG7lq+NzBzay1kSBee8xo6rWx9jiCJmp/8zs4kV1Rmw3e45NlULsyi+PGRErp5R1H6pKAIO8NFngdmRhO7CQu/Dc6gl3DXTUxuMCmdyg9/DQsGO+El6slSu86SE5OiyUCYV9q8r1jTQBizlddjb+LoMi8UQCw0CjwpQuU00fmoyFpAtdh6DXHHHHS3r1ccL0fwFwsoscGV7YKvMZCqL82OHLiXT84JSYryM8fmMoTivRyJGZg4Xdg9i7eAXe4OZGjrOw=
   file: main.pdf
+  skip_cleanup: true
   on:
+    repo: furushchev/ieee-report-template
     tags: true
