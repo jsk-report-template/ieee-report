@@ -4,37 +4,35 @@
 # Date: 2015/11/12
 ###########################################################
 
+TARGET := main
 
-.PHONY: all open clean wipe forever preinstall pub publish
-OS=$(shell uname -s)
+OS := $(shell uname -s)
+LATEXMK := $(shell command -v latexmk 2> /dev/null)
+LATEXMK_OPTION := -time -recorder -rules
+LATEXMK_EXEC := latexmk $(LATEXMK_OPTION)
+
+.PHONY: all install preview clean wipe
+
+all: install
+	$(LATEXMK_EXEC) $(TARGET)
+
+preview: install
+	$(LATEXMK_EXEC) -pv $(TARGET)
+
+clean: install
+	$(LATEXMK_EXEC) -c
+
+wipe: install clean
+	$(LATEXMK_EXEC) -C
+	git clean -X -f -i -e '.tex' -e '.tex.orig'
+
+install:
+ifndef LATEXMK
+	@echo 'installing components...'
 ifeq ($(OS), Linux)
-	OMAKE_INSTALL=sudo apt-get install -y -qq omake fam
-	TEX_INSTALL=sudo apt-get install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv
+	sudo apt install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv latexmk
 endif
 ifeq ($(OS), Darwin)
-	OMAKE_INSTALL=brew install -y opam && opam init -y -j4 -q && eval `opam config env` && opam install omake -y -j4 -q
-	TEX_INSTALL=brew install -y caskroom/cask/brew-cask && brew cask install -y mactex && sudo tlmgr update --self --all
+	brew tap caskroom/cask && brew cask install -v mactex && sudo tlmgr update --self --all
 endif
-
-all: preinstall
-	omake
-
-forever: preinstall
-	omake -P
-
-open: preinstall
-	omake preview
-
-publish: preinstall
-	omake publish
-pub: publish
-
-clean: preinstall
-	omake clean
-
-wipe: clean
-	git clean -X -f -i -e '.tex'
-
-preinstall:
-	@if ! which omake > /dev/null; then $(OMAKE_INSTALL); fi
-	@if ! which platex > /dev/null; then $(TEX_INSTALL); fi
+endif
