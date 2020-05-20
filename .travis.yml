@@ -7,6 +7,12 @@ matrix:
   - os: linux
     dist: trusty
     sudo: required
+  - os: linux
+    dist: xenial
+    sudo: required
+  - os: linux
+    dist: bionic
+    sudo: required
   - os: osx
   allow_failures:
   - os: osx
@@ -25,5 +31,5 @@ deploy:
   file: main.pdf
   skip_cleanup: true
   on:
-    repo: furushchev/ieee-report-template
+    repo: jsk-report-template/ieee-report
     tags: true
