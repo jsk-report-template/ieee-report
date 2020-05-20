@@ -4,7 +4,7 @@ Latex template for IEEE Conference (Paper Plaza)
 
 based on http://ras.papercept.net/conferences/support/tex.php
 
-[![Build Status](https://travis-ci.org/furushchev/ieee-report-template.svg)](https://travis-ci.org/furushchev/ieee-report-template)
+[![Build Status](https://travis-ci.org/jsk-report-template/ieee-report.svg?branch=master)](https://travis-ci.org/jsk-report-template/ieee-report)
 
 ### 1. Prerequisities
 
