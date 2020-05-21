@@ -36,7 +36,7 @@ ifeq ($(VERSION), 12.04)
 else ifeq ($(VERSION), 14.04)
 	sudo apt install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv latexmk
 else
-	sudo apt install -y -qq texlive texlive-lang-cjk texlive-lang-japanese texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja gv latexmk
+	sudo apt install -y -qq texlive texlive-lang-cjk texlive-lang-japanese texlive-science texlive-fonts-recommended texlive-fonts-extra texlive-font-utils xdvik-ja gv latexmk
 endif
 endif
 ifeq ($(OS), Darwin)
