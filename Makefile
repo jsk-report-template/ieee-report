@@ -31,7 +31,9 @@ install:
 ifndef LATEXMK
 	@echo 'installing components...'
 ifeq ($(OS), Linux)
-ifeq ($(VERSION), 12.04)
+ifeq ($(VERSION), )
+	$(error lsb-release is not installed)
+else ifeq ($(VERSION), 12.04)
 	sudo apt-get install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv latexmk
 else ifeq ($(VERSION), 14.04)
 	sudo apt install -y -qq texlive texlive-lang-cjk texlive-science texlive-fonts-recommended texlive-fonts-extra xdvik-ja dvipsk-ja gv latexmk
