@@ -1,4 +1,4 @@
-# ieee-report-template
+# ieee-report
 
 Latex template for IEEE Conference (Paper Plaza)
 
@@ -6,24 +6,15 @@ based on http://ras.papercept.net/conferences/support/tex.php
 
 [![Build Status](https://travis-ci.org/jsk-report-template/ieee-report.svg?branch=master)](https://travis-ci.org/jsk-report-template/ieee-report)
 
-### 1. Prerequisities
+### 1. Edit LaTeX files
 
-```bash
-# only for ubuntu 12.04
-$ sudo apt-add-repository ppa:texlive-backports/ppa
-$ sudo apt-get update
-$ sudo apt-get install lsb-release
-```
-
-### 2. Edit LaTeX files
-
-### 3. Make pdf
+### 2. Make pdf
 
 ```bash
 $ make
 ```
 
-### 4. Release pdf
+### 3. Release pdf
 
 - Install [Travis Command Line Tool](https://github.com/travis-ci/travis.rb#installation)
 - Enable Travis
@@ -31,19 +22,19 @@ $ make
   ```bash
   travis enable
   travis setup releases --force
-```
+  ```
 
 - After `travis` command, configuration like below will be appended to `.travis.yml`.
 
   ```yaml
-deploy:
-  provider: releases
-  api_key: "GITHUB OAUTH TOKEN"
-  file: main.pdf
-  skip_cleanup: true
-  on:
-    tags: true
-```
+  deploy:
+    provider: releases
+    api_key: "GITHUB OAUTH TOKEN"
+    file: main.pdf
+    skip_cleanup: true
+    on:
+      tags: true
+  ```
 
 **NOTE** Please make sure you have `skip_cleanup` and `on: tags` is `true`
 
